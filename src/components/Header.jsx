@@ -3,27 +3,43 @@ import { HiMenuAlt2 } from "react-icons/hi";
 import { IoIosSearch } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import { auth } from "../../firebase";
+import { auth, db } from "../../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import Swal from "sweetalert2";
+import { doc, getDoc } from "firebase/firestore";
 const Header = ({ setSearch }) => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const [user, setUser] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [openMenu, setOpenMenu] = useState(false);
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUSer) =>
-      setUser(currentUSer)
-    );
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+
+      if (currentUser) {
+        const userRef = doc(db, "users", currentUser.uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          setUserData(userSnap.data());
+        }
+      } else {
+        setUserData(null);
+      }
+    });
+
     return () => unsubscribe();
-  });
+  }, []);
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
       setUser(null);
+      setUserData(null);
       Swal.fire({
-        icon : "success",
-        text : ""
-      })
+        icon: "success",
+        text: "",
+      });
     } catch (error) {
       console.error("Logout Failed :", error.message);
     }
@@ -138,12 +154,30 @@ const Header = ({ setSearch }) => {
         {/* Login / Signup */}
         <div className="flex gap-2">
           {user ? (
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 border rounded-md text-[12px] text-slate-800 hover:text-white hover:bg-rose-600 transition-all duration-300 cursor-pointer"
-            >
-              Logout
-            </button>
+            <>
+              <div className="reltaive">
+                {/* user profile  */}
+                <button onClick={()=> setOpenMenu(!openMenu)}>
+                  <img
+                    src={userData?.profilepic || "/newshive_logo.jpeg"}
+                    alt="user-profile"
+                  />
+                  <p>{userData?.firstName}</p>
+                </button>
+              </div>
+              {/* drop down menu  */}
+              {openMenu && (
+                <div>
+                  <Link to={"/profile"}>Profile</Link>
+                  <button
+                    onClick={handleLogout}
+                    className="px-4 py-2 border rounded-md text-[12px] text-slate-800 hover:text-white hover:bg-rose-600 transition-all duration-300 cursor-pointer"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </>
           ) : (
             <>
               <Link
