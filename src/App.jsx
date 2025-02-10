@@ -1,27 +1,29 @@
 import "./App.css";
 import Header from "./components/Header";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./components/Home"
+import Home from "./components/Home";
 import Politics from "./components/Politics";
 import Sports from "./components/Sports";
 import Tech from "./components/Tech";
 import Business from "./components/Business";
 import Footer from "./components/Footer";
 import NewsLetter from "./components/ui/NewsLetter";
+import { useState } from "react";
 function App() {
+  const [search, setSearch] = useState("");
   return (
     <>
       <BrowserRouter>
-        <Header />
+        <Header setSearch={setSearch} />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/politics" element={<Politics />} />
-          <Route path="/sports" element={<Sports />} />
-          <Route path="/tech" element={<Tech />} />
-          <Route path="/business" element={<Business/>} />
+          <Route path="/" element={<Home search={search} />} />
+          <Route path="/politics" element={<Politics search={search} />} />
+          <Route path="/sports" element={<Sports search={search} />} />
+          <Route path="/tech" element={<Tech search={search} />} />
+          <Route path="/business" element={<Business search={search} />} />
         </Routes>
-        <NewsLetter/>
-        <Footer/>
+        <NewsLetter />
+        <Footer />
       </BrowserRouter>
     </>
   );

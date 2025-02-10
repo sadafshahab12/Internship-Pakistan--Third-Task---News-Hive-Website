@@ -3,11 +3,11 @@ import { useState } from "react";
 import { IoMdTime } from "react-icons/io";
 import { MdDateRange } from "react-icons/md";
 import Loading from "./ui/Loading";
-const Sports = () => {
+const Sports = ({ search }) => {
   const [sportsNews, setSportsNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  
+
   const newsPerPage = 9;
 
   useEffect(() => {
@@ -45,11 +45,15 @@ const Sports = () => {
   console.log(currentNews);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const filteredSportNews = currentNews.filter((sportItem) =>
+    sportItem.title.toLowerCase().includes(search.toLowerCase())
+  );
   return (
     <section className="max-w-6xl mx-auto py-8 px-6 text-slate-700 space-y-6 ">
       <h1 className="text-3xl text-center font-bold ">Sports News</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 font-Karla gap-8 ">
-        {currentNews.map((sportsNews, index) => {
+        {filteredSportNews.map((sportsNews, index) => {
           const date = new Date(sportsNews.publishedAt);
           const formatedDate = date.toLocaleDateString("en-US", {
             year: "numeric",

@@ -4,8 +4,7 @@ import { IoIosSearch } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
 
-const Header = () => {
-  const [search, setSearch] = useState("");
+const Header = ({ setSearch }) => {
   const [toggleMenu, setToggleMenu] = useState(false);
 
   const handleToggleMenu = () => {
@@ -94,7 +93,6 @@ const Header = () => {
             <input
               type="text"
               placeholder="Search news..."
-              value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full text-sm py-2 px-4 border rounded-full focus:outline-none focus:ring-2 focus:ring-red-400"
             />
@@ -108,7 +106,6 @@ const Header = () => {
           <input
             type="text"
             placeholder="Search news..."
-            value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full text-sm py-2 px-4 border rounded-full focus:outline-none focus:ring-2 focus:ring-red-400"
           />
