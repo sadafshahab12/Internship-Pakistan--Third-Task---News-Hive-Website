@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@theme {
+  --font-OpenSans: "Open Sans";
+  --font-Karla: "Karla";
+  --breakpoint-xxs: 20rem;
+  --breakpoint-xs: 30rem;
+  --animate-marquee: marquee 1.5s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
