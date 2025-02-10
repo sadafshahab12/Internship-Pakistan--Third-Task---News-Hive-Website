@@ -9,6 +9,7 @@ import Business from "./components/Business";
 import Footer from "./components/Footer";
 import NewsLetter from "./components/ui/NewsLetter";
 import { useState } from "react";
+import SignUp from "./components/ui/SignUp";
 function App() {
   const [search, setSearch] = useState("");
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/sports" element={<Sports search={search} />} />
           <Route path="/tech" element={<Tech search={search} />} />
           <Route path="/business" element={<Business search={search} />} />
+          <Route path="/signup" element={<SignUp/>}/>
         </Routes>
         <NewsLetter />
         <Footer />

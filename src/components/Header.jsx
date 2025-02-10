@@ -1,12 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiMenuAlt2 } from "react-icons/hi";
 import { IoIosSearch } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
-
+import { auth } from "../../firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import Swal from "sweetalert2";
 const Header = ({ setSearch }) => {
   const [toggleMenu, setToggleMenu] = useState(false);
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUSer) =>
+      setUser(currentUSer)
+    );
+    return () => unsubscribe();
+  });
 
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+      Swal.fire({
+        icon : "success",
+        text : ""
+      })
+    } catch (error) {
+      console.error("Logout Failed :", error.message);
+    }
+  };
   const handleToggleMenu = () => {
     setToggleMenu(!toggleMenu);
   };
@@ -14,7 +35,7 @@ const Header = ({ setSearch }) => {
     setToggleMenu(!toggleMenu);
   };
   return (
-    <header className="bg-white w-full sticky top-0 z-50 font-OpenSans">
+    <header className="bg-white w-full sticky top-0 z-50 font-OpenSans shadow-md">
       <div className="px-4 py-3 flex justify-between items-center">
         {/* Logo */}
         <Link
@@ -116,18 +137,29 @@ const Header = ({ setSearch }) => {
 
         {/* Login / Signup */}
         <div className="flex gap-2">
-          <Link
-            to="/login"
-            className="px-4 py-2 border rounded-md text-[12px] text-slate-800 hover:text-white hover:bg-rose-600 transition-all duration-300"
-          >
-            Login
-          </Link>
-          <Link
-            to="/signup"
-            className="px-4 py-2 xs:block hidden  bg-red-600 text-[12px] text-white rounded-md hover:bg-slate-800 transition-all duration-300"
-          >
-            Sign Up
-          </Link>
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 border rounded-md text-[12px] text-slate-800 hover:text-white hover:bg-rose-600 transition-all duration-300 cursor-pointer"
+            >
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="px-4 py-2 border rounded-md text-[12px] text-slate-800 hover:text-white hover:bg-rose-600 transition-all duration-300"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="px-4 py-2 xs:block hidden  bg-red-600 text-[12px] text-white rounded-md hover:bg-slate-800 transition-all duration-300"
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

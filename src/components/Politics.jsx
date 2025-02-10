@@ -3,11 +3,16 @@ import { useState } from "react";
 import { IoMdTime } from "react-icons/io";
 import { MdDateRange } from "react-icons/md";
 import Loading from "./ui/Loading";
+import { auth } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 const Politics = () => {
   const [politicsNews, setPoliticsNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  
+  const [user, setUser] = useState(null);
+
+  const navigate = useNavigate();
+
   const newsPerPage = 9;
 
   useEffect(() => {
@@ -27,6 +32,8 @@ const Politics = () => {
       }
     };
     fetchNews();
+
+    auth.onAuthStateChanged((curretUser) => setUser(curretUser));
   }, []);
   if (loading) {
     return (
@@ -48,7 +55,7 @@ const Politics = () => {
   return (
     <section className="max-w-6xl mx-auto py-8 px-6 text-slate-700 space-y-6 ">
       <h1 className="text-3xl text-center font-bold ">Politics News</h1>
-      <div className="xs:grid hidden grid-cols-1 sm:grid-cols-2 md:grid-cols-3 font-Karla gap-8 ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 font-Karla gap-8 ">
         {currentNews.map((politicsNews, index) => {
           const date = new Date(politicsNews.publishedAt);
           const formatedDate = date.toLocaleDateString("en-US", {
@@ -62,6 +69,13 @@ const Politics = () => {
             second: "2-digit",
             hour12: true,
           });
+          const handleReadMore = () => {
+            if (!user) {
+              navigate("/signup");
+            } else {
+              window.open(politicsNews.url, "_blank");
+            }
+          };
           return (
             <div
               key={index}
@@ -91,24 +105,26 @@ const Politics = () => {
                   {formatedTime}
                 </p>
               </div>
-              <a href={politicsNews.url} target="_blank">
-                <button className="cursor-pointer py-2 px-4 rounded-md bg-red-700 text-white text-sm">
-                  Read More
-                </button>
-              </a>
+
+              <button
+                onClick={handleReadMore}
+                className="cursor-pointer py-2 px-4 rounded-md bg-red-700 text-white text-sm"
+              >
+                Read More
+              </button>
             </div>
           );
         })}
       </div>
 
-      <div className=" flex items-center justify-center gap-5 ">
+      <div className=" flex items-center justify-center xs:gap-5 gap-2 ">
         {Array.from(
           { length: Math.ceil(politicsNews.length / newsPerPage) },
           (_, index) => (
             <button
               key={index}
               onClick={() => paginate(index + 1)}
-              className={`xs:h-10 h-6 xs:w-10 w-6 text-sm flex justify-center items-center  
+              className={`xs:h-10 h-5 xs:w-10 w-6 xs:text-sm text-[12px] flex justify-center items-center  
               cursor-pointer ${
                 currentPage === index + 1
                   ? "bg-slate-700 text-white"
