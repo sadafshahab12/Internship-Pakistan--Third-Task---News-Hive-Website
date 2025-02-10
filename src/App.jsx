@@ -6,6 +6,8 @@ import Politics from "./components/Politics";
 import Sports from "./components/Sports";
 import Tech from "./components/Tech";
 import Business from "./components/Business";
+import Footer from "./components/Footer";
+import NewsLetter from "./components/ui/NewsLetter";
 function App() {
   return (
     <>
@@ -18,6 +20,8 @@ function App() {
           <Route path="/tech" element={<Tech />} />
           <Route path="/business" element={<Business/>} />
         </Routes>
+        <NewsLetter/>
+        <Footer/>
       </BrowserRouter>
     </>
   );

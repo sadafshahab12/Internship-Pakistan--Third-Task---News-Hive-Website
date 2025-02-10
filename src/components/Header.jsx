@@ -11,6 +11,9 @@ const Header = () => {
   const handleToggleMenu = () => {
     setToggleMenu(!toggleMenu);
   };
+  const closeMenu = () => {
+    setToggleMenu(!toggleMenu);
+  };
   return (
     <header className="bg-white w-full sticky top-0 z-50 font-OpenSans">
       <div className="px-4 py-3 flex justify-between items-center">
@@ -53,26 +56,35 @@ const Header = () => {
         </nav>
         {/* MobileMenu   */}
         <nav
-          className={`md:hidden flex flex-col items-center h-screen fixed top-14 ${
-            toggleMenu ? "left-0" : "-left-full"
-          } w-full  gap-8 font-medium text-sm bg-white p-5 transition-all duration-300`}
+          className={`md:hidden flex flex-col items-center fixed top-14 left-0 w-full h-screen gap-8 font-medium text-sm bg-white p-5 transition-all duration-300 z-50 ${
+            toggleMenu ? "translate-x-0" : "-translate-x-full"
+          }`}
         >
-          <Link to="/" className="hover:text-red-600">
+          <Link to="/" className="hover:text-red-600" onClick={closeMenu}>
             Home
           </Link>
-          <Link to="/politics" className="hover:text-red-600">
+          <Link
+            to="/politics"
+            className="hover:text-red-600"
+            onClick={closeMenu}
+          >
             Politics
           </Link>
-          <Link to="/sports" className="hover:text-red-600">
+          <Link to="/sports" className="hover:text-red-600" onClick={closeMenu}>
             Sports
           </Link>
-          <Link to="/tech" className="hover:text-red-600">
+          <Link to="/tech" className="hover:text-red-600" onClick={closeMenu}>
             Tech
           </Link>
-          <Link to="/business" className="hover:text-red-600">
+          <Link
+            to="/business"
+            className="hover:text-red-600"
+            onClick={closeMenu}
+          >
             Business
           </Link>
           <Link
+            onClick={closeMenu}
             to="/signup"
             className="px-4 py-2 xs:hidden block bg-red-600 text-[12px] text-white rounded-md hover:bg-slate-800 transition-all duration-300"
           >
