@@ -18,16 +18,7 @@ const News = ({ search }) => {
     
     const fetchNews = async () => {
       try {
-        const response = await fetch(API_URL, {
-          method: "GET",
-          headers: {
-            "Accept": "application/json",
-            "User-Agent": "Newshive", // Some APIs require a User-Agent
-          },
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetch(API_URL);
         const data = await response.json();
         setNews(data.articles || []);
       } catch (error) {
