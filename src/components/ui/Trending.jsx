@@ -15,7 +15,16 @@ const Trending = () => {
     const TrendingNewsAPIURL = `https://newsapi.org/v2/everything?q=trending&apiKey=${TrendingNewsAPI}`;
     const FetchTrendingNews = async () => {
       try {
-        const response = await fetch(TrendingNewsAPIURL);
+        const response = await fetch(TrendingNewsAPIURL, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json",
+            "User-Agent": "Newshive", // Some APIs require a User-Agent
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
         const data = await response.json();
         setTrendingNews(data.articles);
       } catch (error) {
