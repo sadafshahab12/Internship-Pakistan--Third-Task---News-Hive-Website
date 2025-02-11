@@ -3,6 +3,7 @@ import Loading from "./Loading";
 import { MdDateRange } from "react-icons/md";
 import { IoMdTime } from "react-icons/io";
 import Slider from "react-slick";
+import axios from "axios";
 
 const Trending = () => {
   const [trendingNews, setTrendingNews] = useState([]);
@@ -15,18 +16,8 @@ const Trending = () => {
     const TrendingNewsAPIURL = `https://newsapi.org/v2/everything?q=trending&apiKey=${TrendingNewsAPI}`;
     const FetchTrendingNews = async () => {
       try {
-        const response = await fetch(TrendingNewsAPIURL, {
-          method: "GET",
-          headers: {
-            "Accept": "application/json",
-            "User-Agent": "Newshive", // Some APIs require a User-Agent
-          },
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        setTrendingNews(data.articles);
+        const response = await axios.get(TrendingNewsAPIURL); // Use Axios to fetch data
+        setTrendingNews(response.data.articles);
       } catch (error) {
         console.log(`Error in fetching Trending News : ${error}`);
       } finally {
@@ -62,7 +53,9 @@ const Trending = () => {
 
   return (
     <section className="bg-slate-700 py-8 px-6 text-slate-700 space-y-6 xxs:h-auto min-h-[40rem]">
-      <h1 className="text-3xl text-center font-bold text-white">Trending News</h1>
+      <h1 className="text-3xl text-center font-bold text-white">
+        Trending News
+      </h1>
       <div className="xs:grid hidden grid-cols-1 sm:grid-cols-2 md:grid-cols-3 font-Karla gap-8 max-w-6xl mx-auto">
         {currentNews.map((news, index) => {
           const date = new Date(news.publishedAt);
@@ -78,12 +71,23 @@ const Trending = () => {
             hour12: true,
           });
           return (
-            <div key={index} className="p-5 shadow-md space-y-6 bg-white transition-all duration-500">
+            <div
+              key={index}
+              className="p-5 shadow-md space-y-6 bg-white transition-all duration-500"
+            >
               <div className="space-y-2">
-                <h1 className="sm:text-xl xs:text-[16px] font-black">{news.title}</h1>
-                <p className="text-[12px] bg-slate-600 inline-block text-white py-1 px-4">Author: {news.author}</p>
+                <h1 className="sm:text-xl xs:text-[16px] font-black">
+                  {news.title}
+                </h1>
+                <p className="text-[12px] bg-slate-600 inline-block text-white py-1 px-4">
+                  Author: {news.author}
+                </p>
               </div>
-              <img src={news.urlToImage} alt="News" className="w-full h-50 xxs:h-60 object-cover rounded-md hover:scale-105 transition-all duration-300" />
+              <img
+                src={news.urlToImage}
+                alt="News"
+                className="w-full h-50 xxs:h-60 object-cover rounded-md hover:scale-105 transition-all duration-300"
+              />
               <p className="text-sm">{news.description}</p>
               <div className="flex justify-between text-[12px]">
                 <p className="flex items-center gap-4">
@@ -94,7 +98,9 @@ const Trending = () => {
                 </p>
               </div>
               <a href={news.url} target="_blank">
-                <button className="cursor-pointer py-2 px-4 rounded-md bg-red-700 text-white text-sm">Read More</button>
+                <button className="cursor-pointer py-2 px-4 rounded-md bg-red-700 text-white text-sm">
+                  Read More
+                </button>
               </a>
             </div>
           );
@@ -103,15 +109,22 @@ const Trending = () => {
 
       {/* Pagination */}
       <div className="flex justify-center mt-4">
-        {Array.from({ length: Math.ceil(trendingNews.length / newsPerPage) }, (_, index) => (
-          <button
-            key={index}
-            onClick={() => paginate(index + 1)}
-            className={`mx-1 px-3 py-1 rounded-md ${currentPage === index + 1 ? "bg-red-700 text-white" : "bg-white text-black"}`}
-          >
-            {index + 1}
-          </button>
-        ))}
+        {Array.from(
+          { length: Math.ceil(trendingNews.length / newsPerPage) },
+          (_, index) => (
+            <button
+              key={index}
+              onClick={() => paginate(index + 1)}
+              className={`mx-1 px-3 py-1 rounded-md ${
+                currentPage === index + 1
+                  ? "bg-red-700 text-white"
+                  : "bg-white text-black"
+              }`}
+            >
+              {index + 1}
+            </button>
+          )
+        )}
       </div>
 
       {/* Mobile Card Carousel */}
@@ -131,12 +144,23 @@ const Trending = () => {
               hour12: true,
             });
             return (
-              <div key={index} className="shadow-md bg-white p-2 space-y-4 transition-all duration-500 xxs:min-h-120 min-h-150">
+              <div
+                key={index}
+                className="shadow-md bg-white p-2 space-y-4 transition-all duration-500 xxs:min-h-120 min-h-150"
+              >
                 <div className="space-y-2">
-                  <h1 className="sm:text-xl xs:text-[16px] text-[14px] font-black">{news.title}</h1>
-                  <p className="text-[12px] bg-slate-600 inline-block text-white py-1 px-4">Author: {news.author}</p>
+                  <h1 className="sm:text-xl xs:text-[16px] text-[14px] font-black">
+                    {news.title}
+                  </h1>
+                  <p className="text-[12px] bg-slate-600 inline-block text-white py-1 px-4">
+                    Author: {news.author}
+                  </p>
                 </div>
-                <img src={news.urlToImage} alt="News" className="w-full h-35 xxs:h-40 xs:h-60 object-cover rounded-md hover:scale-105 transition-all duration-300" />
+                <img
+                  src={news.urlToImage}
+                  alt="News"
+                  className="w-full h-35 xxs:h-40 xs:h-60 object-cover rounded-md hover:scale-105 transition-all duration-300"
+                />
                 <p className="text-sm">{news.description}</p>
                 <div className="flex justify-between text-[12px]">
                   <p className="flex items-center gap-4">
@@ -147,7 +171,9 @@ const Trending = () => {
                   </p>
                 </div>
                 <a href={news.url} target="_blank">
-                  <button className="cursor-pointer py-2 px-4 rounded-md bg-red-700 text-white text-sm">Read More</button>
+                  <button className="cursor-pointer py-2 px-4 rounded-md bg-red-700 text-white text-sm">
+                    Read More
+                  </button>
                 </a>
               </div>
             );

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { IoMdTime } from "react-icons/io";
 import { MdDateRange } from "react-icons/md";
 import Loading from "./ui/Loading";
+import axios from "axios";
 const Sports = ({ search }) => {
   const [sportsNews, setSportsNews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,9 +16,8 @@ const Sports = ({ search }) => {
     const API_URL = `https://newsapi.org/v2/everything?q=sports&apiKey=${API_KEY}`;
     const fetchNews = async () => {
       try {
-        const response = await fetch(API_URL);
-        const data = await response.json();
-        setSportsNews(data.articles);
+        const response = await axios.get(API_URL); // Use Axios to fetch data
+        setSportsNews(response.data.articles);
       } catch (error) {
         console.log(`Error in fetching data : ${error}`);
       } finally {
