@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import { HiMenuAlt2 } from "react-icons/hi";
 import { IoIosSearch } from "react-icons/io";
-import { IoClose } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { IoChevronDown, IoClose } from "react-icons/io5";
+import { Link, useNavigate } from "react-router-dom";
 import { auth, db } from "../../firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import Swal from "sweetalert2";
 import { doc, getDoc } from "firebase/firestore";
+import { RiLogoutCircleRLine } from "react-icons/ri";
+import { FaUserCircle } from "react-icons/fa";
 const Header = ({ setSearch }) => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [openMenu, setOpenMenu] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
@@ -40,6 +43,7 @@ const Header = ({ setSearch }) => {
         icon: "success",
         text: "",
       });
+      navigate("/");
     } catch (error) {
       console.error("Logout Failed :", error.message);
     }
@@ -49,6 +53,9 @@ const Header = ({ setSearch }) => {
   };
   const closeMenu = () => {
     setToggleMenu(!toggleMenu);
+  };
+  const closeProfileMenu = () => {
+    setOpenMenu(!openMenu);
   };
   return (
     <header className="bg-white w-full sticky top-0 z-50 font-OpenSans shadow-md">
@@ -155,25 +162,40 @@ const Header = ({ setSearch }) => {
         <div className="flex gap-2">
           {user ? (
             <>
-              <div className="reltaive">
+              <div className="relative cursor-pointer">
                 {/* user profile  */}
-                <button onClick={()=> setOpenMenu(!openMenu)}>
+                <button
+                  onClick={() => setOpenMenu(!openMenu)}
+                  className=" flex  items-center gap-2 cursor-pointer"
+                >
                   <img
                     src={userData?.profilepic || "/newshive_logo.jpeg"}
                     alt="user-profile"
+                    className="w-8 h-8 rounded-full cursor-pointer"
                   />
-                  <p>{userData?.firstName}</p>
+                  <p className="text-sm flex items-center gap-2 ">
+                    {userData?.firstName}{" "}
+                    <IoChevronDown className="w-2.75 h-2.75" />
+                  </p>
                 </button>
               </div>
               {/* drop down menu  */}
               {openMenu && (
-                <div>
-                  <Link to={"/profile"}>Profile</Link>
-                  <button
+                <div className="absolute bg-white top-20 right-8 p-3 w-40 rounded-md  space-y-3">
+                  <div className="w-full" onClick={closeProfileMenu}>
+                    <Link
+                      to={"/profile"}
+                      className="text-sm bg-slate-200 hover:bg-slate-300 w-full rounded-md text-center py-2 px-3 transition-all duration-300 flex justify-center items-center gap-2"
+                    >
+                      {" "}
+                      <FaUserCircle className="w-4 h-4" /> Profile
+                    </Link>
+                  </div>
+                  <button 
                     onClick={handleLogout}
-                    className="px-4 py-2 border rounded-md text-[12px] text-slate-800 hover:text-white hover:bg-rose-600 transition-all duration-300 cursor-pointer"
+                    className="px-4 py-2 border rounded-md text-[12px] bg-slate-800 text-white hover:text-white hover:bg-rose-600 transition-all duration-300 cursor-pointer w-full flex items-center gap-2 justify-center"
                   >
-                    Logout
+                    <RiLogoutCircleRLine className="w-4 h-4" /> Logout
                   </button>
                 </div>
               )}
