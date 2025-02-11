@@ -5,6 +5,7 @@ import { MdDateRange } from "react-icons/md";
 import Loading from "./ui/Loading";
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
+
 const Politics = () => {
   const [politicsNews, setPoliticsNews] = useState([]);
   const [loading, setLoading] = useState(true);
