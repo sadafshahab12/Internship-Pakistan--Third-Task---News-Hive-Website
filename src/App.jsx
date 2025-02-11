@@ -11,11 +11,12 @@ import NewsLetter from "./components/ui/NewsLetter";
 import { useState } from "react";
 import SignUp from "./components/ui/SignUp";
 import Login from "./components/ui/Login";
-import UserProfile from "./components/ui/UserProfile";
+
 function App() {
   const [search, setSearch] = useState("");
+
   return (
-    <>
+    <div className={`min-h-screen }`}>
       <BrowserRouter>
         <Header setSearch={setSearch} />
         <Routes>
@@ -24,14 +25,13 @@ function App() {
           <Route path="/sports" element={<Sports search={search} />} />
           <Route path="/tech" element={<Tech search={search} />} />
           <Route path="/business" element={<Business search={search} />} />
-          <Route path="/signup" element={<SignUp/>}/>
-          <Route path="/login" element={<Login/>}/>
-          <Route path="/profile" element={<UserProfile/>}/>
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
         <NewsLetter />
         <Footer />
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 

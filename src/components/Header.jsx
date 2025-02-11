@@ -41,8 +41,11 @@ const Header = ({ setSearch }) => {
       setUserData(null);
       Swal.fire({
         icon: "success",
-        text: "",
+        text: "Logout Successfully",
+        timer : 1500,
+        showConfirmButton: false
       });
+      setOpenMenu(!openMenu)
       navigate("/");
     } catch (error) {
       console.error("Logout Failed :", error.message);
@@ -184,7 +187,7 @@ const Header = ({ setSearch }) => {
                 <div className="absolute bg-white top-20 right-8 p-3 w-40 rounded-md  space-y-3">
                   <div className="w-full" onClick={closeProfileMenu}>
                     <Link
-                      to={"/profile"}
+                      to={"/"}
                       className="text-sm bg-slate-200 hover:bg-slate-300 w-full rounded-md text-center py-2 px-3 transition-all duration-300 flex justify-center items-center gap-2"
                     >
                       {" "}
