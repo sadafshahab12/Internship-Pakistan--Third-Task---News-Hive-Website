@@ -5,7 +5,6 @@ import { MdDateRange } from "react-icons/md";
 import Loading from "./ui/Loading";
 import { auth } from "../../firebase";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const Politics = () => {
   const [politicsNews, setPoliticsNews] = useState([]);
@@ -22,8 +21,9 @@ const Politics = () => {
     const API_URL = `https://newsapi.org/v2/everything?q=politics&apiKey=${API_KEY}`;
     const fetchNews = async () => {
       try {
-        const response = await axios.get(API_URL); // Use Axios to fetch data
-        setPoliticsNews(response.data.articles); // Access articles from the response data
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        setPoliticsNews(data.articles);
       } catch (error) {
         console.log(`Error in fetching data : ${error}`);
       } finally {

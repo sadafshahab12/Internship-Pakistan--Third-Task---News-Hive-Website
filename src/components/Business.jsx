@@ -3,7 +3,6 @@ import { useState } from "react";
 import { IoMdTime } from "react-icons/io";
 import { MdDateRange } from "react-icons/md";
 import Loading from "./ui/Loading";
-import axios from "axios";
 const Business = ({ search }) => {
   const [businessNews, setBusinessNews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,9 +15,9 @@ const Business = ({ search }) => {
     const API_URL = `https://newsapi.org/v2/everything?q=business&apiKey=${API_KEY}`;
     const fetchNews = async () => {
       try {
-        const response = await axios.get(API_URL); // Use Axios to fetch data
- 
-        setBusinessNews(response.data.articles);
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        setBusinessNews(data.articles);
       } catch (error) {
         console.log(`Error in fetching data : ${error}`);
       } finally {

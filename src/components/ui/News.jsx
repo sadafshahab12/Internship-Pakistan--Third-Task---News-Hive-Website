@@ -5,7 +5,6 @@ import Loading from "./Loading";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import axios from "axios";
 
 const News = ({ search }) => {
   const [news, setNews] = useState([]);
@@ -16,12 +15,12 @@ const News = ({ search }) => {
   useEffect(() => {
     const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
     const API_URL = `https://newsapi.org/v2/everything?q=latest&apiKey=${API_KEY}`;
-
+    
     const fetchNews = async () => {
       try {
-        const response = await axios.get(API_URL); // Use Axios to fetch data
-
-        setNews(response.datadata.articles || []);
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        setNews(data.articles || []);
       } catch (error) {
         console.log(`Error in fetching data: ${error}`);
       } finally {
@@ -30,7 +29,7 @@ const News = ({ search }) => {
         }, 1500);
       }
     };
-
+    
     fetchNews();
   }, []);
 
@@ -111,11 +110,7 @@ const News = ({ search }) => {
                     <IoMdTime className="w-5 h-5" /> {formattedTime}
                   </p>
                 </div>
-                <a
-                  href={latestNews.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={latestNews.url} target="_blank" rel="noopener noreferrer">
                   <button className="cursor-pointer py-2 px-4 rounded-md bg-red-700 text-white text-sm">
                     Read More
                   </button>
@@ -190,11 +185,7 @@ const News = ({ search }) => {
                       <IoMdTime className="w-5 h-5" /> {formattedTime}
                     </p>
                   </div>
-                  <a
-                    href={latestNews.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <a href={latestNews.url} target="_blank" rel="noopener noreferrer">
                     <button className="cursor-pointer py-2 px-4 rounded-md bg-red-700 text-white text-sm">
                       Read More
                     </button>
