@@ -18,7 +18,12 @@ const News = ({ search }) => {
     
     const fetchNews = async () => {
       try {
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL,{
+          method:"GET",
+          headers:{
+            "Authorization" : `Bearer ${API_KEY}`
+          }
+        });
         const data = await response.json();
         setNews(data.articles || []);
       } catch (error) {

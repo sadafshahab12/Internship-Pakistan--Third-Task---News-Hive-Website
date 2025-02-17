@@ -21,7 +21,12 @@ const Politics = () => {
     const API_URL = `https://newsapi.org/v2/everything?q=politics&apiKey=${API_KEY}`;
     const fetchNews = async () => {
       try {
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL,{
+          method:"GET",
+          headers:{
+            "Authorization" : `Bearer ${API_KEY}`
+          }
+        });
         const data = await response.json();
         setPoliticsNews(data.articles);
       } catch (error) {

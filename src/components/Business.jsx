@@ -15,7 +15,12 @@ const Business = ({ search }) => {
     const API_URL = `https://newsapi.org/v2/everything?q=business&apiKey=${API_KEY}`;
     const fetchNews = async () => {
       try {
-        const response = await fetch(API_URL);
+        const response = await fetch(API_URL ,{
+          method:"GET",
+          headers:{
+            "Authorization" : `Bearer ${API_KEY}`
+          }
+        });
         const data = await response.json();
         setBusinessNews(data.articles);
       } catch (error) {
